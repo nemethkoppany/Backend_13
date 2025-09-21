@@ -1,0 +1,5 @@
+[
+    {"id":1, "nev":"Kovács Péter", "kor":28, "varos":"Budapest", "hobbi":"futás"},
+    {"id":2, "nev":"Nagy Anna", "kor":25, "varos":"Szeged", "hobbi":"sakk"},
+    {"id":3, "nev":"Kiss László", "kor":32, "varos":"Debrecen", "hobbi":"társasjáték"}
+]
