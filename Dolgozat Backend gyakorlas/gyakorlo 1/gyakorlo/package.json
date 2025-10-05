@@ -1,0 +1,41 @@
+{
+  "name": "gyakorlo",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "lint": "tslint -c tslint.json src/**/*.ts",
+    "prepublish": "npm run build",
+    "dev": "nodemon --exec tsx ./src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.1.10",
+    "tslint": "^5.20.1",
+    "tsx": "^4.20.6"
+  },
+  "description": "",
+  "files": [
+    "./bin/*",
+    "./lib/*"
+  ],
+  "typings": "./lib/index.d.ts",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.6",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.6.2",
+    "@types/nodemon": "^1.19.6",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "directories": {
+    "lib": "lib"
+  }
+}
