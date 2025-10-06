@@ -78,10 +78,11 @@ export function putData(req:Request,res:Response){
         let newData = req.body
         newData.id = maxID + 1;
         data.push(newData);
-        res.status(200).json(newData);
+        res.status(200).json(data);
         return;
     }
 
     data[item] = req.body
     res.status(200).json(data);
 } 
+
