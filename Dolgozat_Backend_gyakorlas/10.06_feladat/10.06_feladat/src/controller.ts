@@ -52,18 +52,60 @@ export function postData(req : Request , res : Response){
     res.status(200).json(data);
 }
 
-export function patchData(req:Request, res: Response){
+// export function postData(req: Request, res: Response) {
+//   const body = req.body;
+
+//   if (!body.name || !body.description || !body.price) {
+//     res.status(400).send("Hiányzó mezők!");
+//     return;
+//   }
+
+//   let newId = 1;
+//   for (let i = 0; i < data.length; i++) {
+//     if (data[i].id >= newId) {
+//       newId = data[i].id + 1;
+//     }
+//   }
+
+//   const newProduct = {
+//     id: newId,
+//     name: body.name,
+//     description: body.description,
+//     price: body.price,
+//     stock: body.stock || 0,
+//     pictururl: body.pictururl || ""
+//   };
+
+//   data.push(newProduct);
+//   res.status(201).send(newProduct);
+//}
+
+export function patchData(req: Request, res: Response) {
+  try {
     const id = parseInt(req.params.id);
+    // if (isNaN(id)) {
+    //   return res.status(400).json({ error: "Érvénytelen ID formátum" });
+    // }
 
-    const Data = data.findIndex(i => i.id === id);
-    if(Data === -1){
-        res.status(404).json("Nem talákható az elem");
-        return
-    }
+    const index = data.findIndex(i => i.id === id);
+    // if (index === -1) {
+    //   return res.status(404).json({ error: "Nem található az elem" });
+    // }
 
-    data[Data] = req.body
-    res.status(200).json(data);
+    // if (!req.body || Object.keys(req.body).length === 0) {
+    //   return res.status(400).json({ error: "Hiányzik a módosítandó adatok" });
+    // }
+
+
+    data[index] = { ...data[index], ...req.body };
+
+    res.status(200).json(data[index]);
+  } catch (err) {
+    // console.error(err);
+    // res.status(500).json({ error: "Szerverhiba történt" });
+  }
 }
+
 
 export function putData(req:Request, res:Response){
     const id= parseInt(req.params.id)
@@ -80,5 +122,4 @@ export function putData(req:Request, res:Response){
 
     data[Data] = req.body
     res.status(200).json(data);
-
 }
