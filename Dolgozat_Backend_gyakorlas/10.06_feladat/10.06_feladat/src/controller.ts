@@ -107,7 +107,7 @@ export function putData(req: Request, res: Response) {
         return res.status(201).json(newData);
     }
 
-    data[index] = { ...data[index], ...req.body, id };
+    data[index] = { ...data[index], ...req.body, id };//Itt el lehet hagyni az id-t
 
     return res.status(200).json(data[index]);
 }
