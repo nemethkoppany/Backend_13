@@ -2,7 +2,18 @@
   "name": "backend_gyakorlofeladat",
   "version": "1.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
   "main": "./lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "./bin/*",
+    "./lib/*"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
@@ -10,10 +21,6 @@
     "lint": "tslint -c tslint.json src/**/*.ts",
     "prepublish": "npm run build"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
@@ -27,9 +34,6 @@
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
-  "files": [
-    "./bin/*",
-    "./lib/*"
-  ],
+  "devDependencies": {},
   "typings": "./lib/index.d.ts"
 }
