@@ -129,6 +129,57 @@ export const patchData = async (req: Request, res: Response) => {
     }
 };
 
+//Just in case
+// export const patchData = async (req: Request, res: Response) => {
+//     const id = Number(req.params.id);
+//     if (isNaN(id)) {
+//         return res.status(400).json("Hibás paraméter");
+//     }
+
+//     const data = req.body;
+//     if (!data || Object.keys(data).length === 0) {
+//         return res.status(400).json("Nem adtál meg adatokat a törzsben");
+//     }
+
+//     const allowedFields = ["name", "breed", "gender", "age", "picurl"];
+
+//     const updates = Object.entries(data)
+//         .filter(([key]) => allowedFields.includes(key));
+
+//     if (updates.length === 0) {
+//         return res.status(400).json({ error: 103, message: "Nincs frissítendő mező" });
+//     }
+
+//     const updateString = updates
+//         .map(([key]) => `${key} = ?`)
+//         .join(", ");
+
+//     const values = [
+//         ...updates.map(([, value]) => value),
+//         id
+//     ];
+
+//     const sql = `UPDATE cat SET ${updateString} WHERE id = ?`;
+
+//     try {
+//         const connection = await mysql.createConnection(config.database);
+//         const [results]: any = await connection.query(sql, values);
+
+//         if (results.affectedRows > 0) {
+//             return res
+//                 .status(200)
+//                 .json(`Sikeresen frissített ${results.affectedRows} rekordot`);
+//         } else {
+//             return res.status(404).json("Az elem nem található");
+//         }
+
+//     } catch (err) {
+//         console.error(err);
+//         return res.status(500).json("Hiba történt a frissítés során");
+//     }
+// };
+
+
 export const PutData = async (req: Request, resp: Response) => {
     let id: number = parseInt(req.params.id);
     const cat: any = new Cat(req.body as ICat);
@@ -204,3 +255,101 @@ export const PutData = async (req: Request, resp: Response) => {
         await connection.end();
     }
 };
+
+//Just in case
+// export const PutData = async (req: Request, res: Response) => {
+//     const id = Number(req.params.id);
+
+//     if (isNaN(id)) {
+//         return res.status(400).send("Hibás paramétert adtál meg!");
+//     }
+
+//     const data = req.body;
+//     if (!data || Object.keys(data).length === 0) {
+//         return res.status(400).send("Nem adtál meg adatokat a törzsben");
+//     }
+
+//     const allowedFields = ["name", "breed", "gender", "age", "picurl"];
+
+//     const updates = Object.entries(data)
+//         .filter(([key]) => allowedFields.includes(key));
+
+//     if (updates.length === 0) {
+//         return res.status(400).json({ error: 103, message: "Nincs frissítendő mező!" });
+//     }
+
+//     const updateString = updates
+//         .map(([key]) => `${key} = ?`)
+//         .join(", ");
+
+//     const values = [
+//         ...updates.map(([, value]) => value),
+//         id
+//     ];
+
+//     const sqlUpdate = `UPDATE cat SET ${updateString} WHERE id = ?`;
+
+//     const sqlInsert = `
+//         INSERT INTO cat (id, name, breed, gender, age, picurl)
+//         VALUES (?, ?, ?, ?, ?, ?)
+//     `;
+
+//     try {
+//         const connection = await mysql.createConnection(config.database);
+
+//         const [existing]: any = await connection.query(
+//             "SELECT * FROM cat WHERE id = ?", 
+//             [id]
+//         );
+
+//         if (existing.length > 0) {
+//             const [results]: any = await connection.query(sqlUpdate, values);
+
+//             if (results.affectedRows > 0) {
+//                 const [updated]: any = await connection.query(
+//                     "SELECT * FROM cat WHERE id = ?", 
+//                     [id]
+//                 );
+
+//                 await connection.end();
+
+//                 return res.status(200).json({
+//                     message: `Sikeresen frissítve (${results.affectedRows} elem)`,
+//                     data: updated[0],
+//                 });
+//             }
+
+//             await connection.end();
+//             return res.status(400).json("Nem történt módosítás");
+//         }
+
+//         const insertValues = [
+//             id,
+//             data.name || null,
+//             data.breed || null,
+//             data.gender ? 1 : 0,
+//             Number(data.age) || null,
+//             data.picurl || null
+//         ];
+
+//         await connection.query(sqlInsert, insertValues);
+
+//         const [newCat]: any = await connection.query(
+//             "SELECT * FROM cat WHERE id = ?", 
+//             [id]
+//         );
+
+//         await connection.end();
+
+//         return res.status(201).json({
+//             message: "Új rekord létrehozva (PUT → INSERT)",
+//             data: newCat[0],
+//         });
+
+//     } catch (err) {
+//         console.error("Hiba PUT során:", err);
+//         return res.status(500).json({
+//             error: "Adatbázis hiba történt a PUT művelet közben"
+//         });
+//     }
+// };
