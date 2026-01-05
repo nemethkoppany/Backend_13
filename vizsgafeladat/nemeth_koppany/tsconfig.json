@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",       // <-- vissza CommonJS-re
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "rootDir": "src",
+    "outDir": "lib",
+    "declaration": true,
+    "lib": ["es2020"]
+  },
+  "include": [
+    "src/**/*",
+    "typings/**/*"
+  ]
+}
