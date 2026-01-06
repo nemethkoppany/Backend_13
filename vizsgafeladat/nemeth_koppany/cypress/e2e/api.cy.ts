@@ -10,8 +10,8 @@ describe("Backend API tests", () => {
     cy.request({
       method: "GET",
       url: "/api/kolcsonzes/auto/1",
-      failOnStatusCode:false,
-      body:{datum:"2026-01-05",napokszam:2}
+      failOnStatusCode: false,
+      body: { datum: "2026-01-05", napokszam: 2 },
     }).then((res) => {
       expect(res.status).to.eq(403);
     });
