@@ -16,6 +16,53 @@ describe("Backend API tests", () => {
       expect(res.status).to.eq(403);
     });
   });
+
+  it("Verify license plate of vehicle id 1", () => {
+    cy.request({
+      method: "GET",
+      url: "/api/auto/1",
+      failOnStatusCode: false,
+    }).then((res) => {
+      expect(res.status).to.eq(200);
+      expect(res.body).to.have.property("rendszam", "AALA475");
+    });
+  });
+
+  let token: string;
+
+  it("Bejelentkezés", () => {
+    cy.request({
+      method: "POST",
+      url: "/api/login",
+      failOnStatusCode: false,
+      body: {
+        email: "Kandi@kandi.hu",
+        jelszo: "Titok123",
+      },
+    }).then((res) => {
+      expect(res.status).to.eq(200);
+      expect(res.body).to.have.property("token");
+      token = res.body.token;
+    });
+  });
+
+  it("Tokenes route lekérdezése", () => {
+    cy.request({
+      method: "GET",
+      url: "/api/kolcsonzes/auto/1",
+      failOnStatusCode: false,
+      headers: {
+        "x-access-token": token,
+      },
+      body: {
+        datum: "2026-01-05",
+        napokszama: 2,
+      },
+    }).then((res) => {
+      expect(res.status).to.eq(200);
+      expect(res.body).to.have.property("kolcsonozheto");
+    });
+  });
 });
 
 /*
