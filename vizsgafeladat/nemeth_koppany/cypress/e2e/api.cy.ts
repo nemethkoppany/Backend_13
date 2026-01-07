@@ -63,6 +63,16 @@ describe("Backend API tests", () => {
       expect(res.body).to.have.property("kolcsonozheto");
     });
   });
+
+  it("A delete tényleg kitörli a rekordot",()=>{
+    cy.request({
+      method:"DELETE",
+      url:"api/auto/1",
+      failOnStatusCode:false
+    }).then((res)=>{
+      expect(res.status).to.eq(204);
+    })
+  })
 });
 
 /*
