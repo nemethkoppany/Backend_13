@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const socket = new WebSocket("ws://localhost:8080");
+        socket.onopen = () =>{
+            socket.send("A frontend is működik")
+        }
+
+        function kuld(){
+            socket.send(document.getElementById("uzi").value
+            )
+        }
+    </script>
+
+    <input type="text" name="uzi" id="uzi">
+    <input type="button" name="kuld" onclick="kuld()" id="">
+</body>
+</html>
