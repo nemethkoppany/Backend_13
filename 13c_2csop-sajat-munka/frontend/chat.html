@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
+    <title>Üzenetek</title>
+  </head>
+  <body>
+    <div class="login-body">
+      <h1>Üzenetek</h1>
+
+      <ul id="messages"></ul>
+
+      <input type="text" name="uzenet" id="uzenet" />
+      <br /><br />
+
+      <div>
+        <button id="public-btn" onclick="sendBroadCast()">Publikus üzenet</button>
+        <button id="private-btn" onclick="sendPrivateMessage()">Privát üzenet</button>
+      </div>
+    </div>
+
+    <script>
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Hibás vagy nem létező token");
+        window.location.href = "login.html";
+      }
+      console.log(token);
+      const socket = new WebSocket("ws://localhost:8080?token=" + token);
+
+      socket.onopen = () => {
+        addMessage("Sikeres csatlakozás");
+      };
+
+      socket.onmessage = (event) => {
+        addMessage(event.data);
+      };
+
+      socket.onerror = () => {
+        addMessage("Szerver hiba");
+      };
+
+      socket.onclose = () => {
+        addMessage("A kapcsolat megszakadt");
+      };
+      function sendBroadCast() {
+        if (socket.readyState !== WebSocket.OPEN) {
+          alert("Nincs aktív kapcsolat a szerverrel!");
+          return;
+        }
+
+        const message = document.getElementById("uzenet");
+
+        socket.send(
+          JSON.stringify({
+            type: "broadcast",
+            message: message.value,
+          })
+        );
+
+        message.value = "";
+      }
+
+      function sendPrivateMessage() {
+  const message = document.getElementById("uzenet");
+  const toEmail = prompt("Adja meg a címzett email-jét:");
+
+  if (!toEmail){
+    return;
+  }
+
+  socket.send(
+    JSON.stringify({
+      type: "private",
+      toEmail: toEmail.trim().toLowerCase(), 
+      message: message.value,
+    })
+  );
+
+  message.value = "";
+}
+
+      const list = document.getElementById("messages");
+      function addMessage(text) {
+        const li = document.createElement("li");
+        li.textContent = text;
+        list.appendChild(li);
+      }
+    </script>
+  </body>
+</html>

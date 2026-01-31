@@ -1,0 +1,179 @@
+.login-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#login-btn {
+  background-color: #70e1f5;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #70e1f5;
+  width: 70px;
+  height: 30px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#login-btn:hover {
+  background-color: #ffd194;
+  border-color: #ffd194;
+}
+
+#register-btn {
+  background-color: #d38312;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #d38312;
+  width: 120px;
+  height: 30px;
+  transition: background-color 0.3s ease,border-color 0.3s ease;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#register-btn:hover {
+  background-color: #a83279;
+  border-color: #a83279;
+}
+
+.login-inputs {
+  width: 300px;
+}
+
+.login-inputs div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.login-inputs input {
+  width: 100%; 
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+  background-color: #ccc;
+  box-sizing: border-box;
+}
+
+.login-inputs input:focus {
+  border-color: black;
+}
+
+.login-inputs label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #313131;
+}
+
+body{
+  background-color:#FAF9F6 ;
+}
+
+.register-body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#register-register-btn{
+  background-color: #895bd3;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #895bd3;
+  width: 120px;
+  height: 30px;
+  transition: background-color 0.3s ease,border-color 0.3s ease;
+  cursor: pointer;
+  font-weight: 600;
+
+  
+}
+#register-register-btn:hover{
+  background-color: #9d50bb;
+  border-color: #9d50bb;
+}
+
+#avatar{
+  font-size: 13px;
+  
+}
+
+#messages {
+  list-style: none;
+  padding: 12px;
+  width: 400px;
+  height: 300px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #ffffff;
+  margin-bottom: 16px;
+}
+
+#messages li {
+  margin-bottom: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#uzenet {
+  width: 400px;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.3s;
+  background-color: #ccc;
+  box-sizing: border-box;
+}
+
+#uzenet:focus {
+  border-color: black;
+}
+
+#public-btn {
+  background-color: #70e1f5;
+  border-radius: 10px;
+  border: 2px solid #70e1f5;
+  width: 150px;
+  height: 35px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#public-btn:hover {
+  background-color: #ffd194;
+  border-color: #ffd194;
+}
+
+#private-btn {
+  background-color: #d38312;
+  border-radius: 10px;
+  border: 2px solid #d38312;
+  width: 150px;
+  height: 35px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#private-btn:hover {
+  background-color: #a83279;
+  border-color: #a83279;
+}
+
+.avatar-inputs label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #313131;
+}
