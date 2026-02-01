@@ -22,34 +22,35 @@ const decodedToken = jwt.verify(token,config.jwtSecret)
     res.status(401).send("Az auth nem sikerült!")
 }
  
- export const verifySocketToken = (socket: any, req: any) => {
-    try {
-        const token =
-            req.url?.includes("token=")
-                ? new URL(req.url, "ws://10.5.0.26:8080").searchParams.get("token")
-                : null
- 
-        if (!token) {
-            socket.close()
-            return false
-        }
- 
-        if (!config.jwtSecret) {
-            socket.close()
-            return false
-        }
- 
-        const decodedToken = jwt.verify(token, config.jwtSecret)
-        socket.user = decodedToken
- 
-        return true
+export const verifySocketToken = (socket: any, req: any) => {
+  try {
+    const url = new URL(req.url, "ws://localhost");
+
+    const token = url.searchParams.get("token");
+    const roomId = url.searchParams.get("roomId");
+
+    if (!token || !roomId) {
+      socket.close();
+      return false;
     }
-    catch (e) {
-        console.log(e)
-        socket.close()
-        return false
+
+    if (!config.jwtSecret) {
+      socket.close();
+      return false;
     }
-}
+
+    const decodedToken = jwt.verify(token, config.jwtSecret);
+
+    socket.user = decodedToken;
+    socket.roomId = Number(roomId);
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    socket.close();
+    return false;
+  }
+};
  
  
  

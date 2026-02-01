@@ -101,3 +101,30 @@ UPDATE users
 SET password = pwd_encrypt(password);
 
 SELECT email, password FROM users;
+
+
+CREATE TABLE messages (
+    messageId INT AUTO_INCREMENT PRIMARY KEY,
+    senderId INT NOT NULL,
+    receiverId INT NULL,
+    content TEXT NOT NULL,
+    isPrivate BOOLEAN NOT NULL DEFAULT false,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (senderId) REFERENCES users(userId) ON DELETE CASCADE,
+    FOREIGN KEY (receiverId) REFERENCES users(userId) ON DELETE CASCADE
+);
+
+CREATE TABLE rooms (
+  roomId INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100),
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+INSERT INTO rooms (roomId, name)
+VALUES (1, 'Alap szoba');
+
+ALTER TABLE messages
+ADD roomId INT NOT NULL DEFAULT 1,
+ADD FOREIGN KEY (roomId) REFERENCES rooms(roomId) ON DELETE CASCADE;
+
+DELETE FROM messages;

@@ -177,3 +177,28 @@ body{
   font-weight: 600;
   color: #313131;
 }
+
+#chatroom-btn {
+  background-color: #70e1f5;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #70e1f5;
+  width: 100px;
+  height: 40px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#chatroom-btn:hover {
+  background-color: #ffd194;
+  border-color: #ffd194;
+}
+
+#roomIdInput{
+  height: 30px;
+  width: 70px;
+  border: #ccc;
+  background-color: #ccc;
+  border-radius: 5px;
+}
