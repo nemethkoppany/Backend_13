@@ -7,6 +7,7 @@ interface AuthenticatedWebSocket extends WebSocket {
   user: {
     userId: number;
     email: string;
+    avatar?: string | null;
   };
   roomId: number;
 }
@@ -23,21 +24,33 @@ const broadcastToRoom = (roomId: number, message: string) => {
   }
 };
 
-const sendPrivate = (fromEmail: string,toEmail: string,message: string) => {
+const sendPrivate = (fromEmail: string, toEmail: string, message: string) => {
   let sender: AuthenticatedWebSocket | null = null;
   let found = false;
 
   for (const client of clients) {
-    if (client.user.email === fromEmail){
-       sender = client;
-    }
+    if (client.user.email === fromEmail) sender = client;
     if (client.user.email === toEmail) {
-      client.send(`${fromEmail}: ${message}`);
+      const payload = JSON.stringify({
+        type: "private",
+        email: fromEmail,
+        avatar: sender?.user.avatar ?? null,
+        message: message,
+      });
+      client.send(payload);
       found = true;
     }
   }
 
-  if (!found && sender) sender.send("A címzett nem található");
+  if (!found && sender) {
+    const payload = JSON.stringify({
+      type: "system",
+      email: "Rendszer",
+      message: "A címzett nem található",
+      avatar: null,
+    });
+    sender.send(payload);
+  }
 };
 
 async function saveMessage(senderId: number,receiverId: number | null,content: string,isPrivate: boolean,roomId: number) {
@@ -51,12 +64,20 @@ async function saveMessage(senderId: number,receiverId: number | null,content: s
   await connection.end();
 }
 
-wss.on("connection", (socket: AuthenticatedWebSocket, req: any) => {
+wss.on("connection",async  (socket: AuthenticatedWebSocket, req: any) => {
   const isValid = verifySocketToken(socket, req);
   if (!isValid) return;
 
+   const connection = await mysql.createConnection(config.database);
+  const [rows]: any = await connection.query(
+    "SELECT avatar FROM users WHERE userId = ?",
+    [socket.user.userId]
+  );
+  await connection.end();
+
+  socket.user.avatar = rows[0]?.avatar ?? null;
+
   clients.add(socket);
-  socket.send("Csatlakoztál!");
 
   socket.on("message", async (msg) => {
     let data;
@@ -75,9 +96,23 @@ wss.on("connection", (socket: AuthenticatedWebSocket, req: any) => {
     const fromUserEmail = socket.user.email;
 
     if (data.type === "broadcast") {
-      broadcastToRoom(socket.roomId, `${fromUserEmail}: ${data.message}`);
-      await saveMessage(socket.user.userId,null,data.message,false,socket.roomId);
-    }
+  const payload = JSON.stringify({
+    type: "broadcast",
+    email: socket.user.email,
+    avatar: socket.user.avatar,
+    message: data.message
+  });
+
+  broadcastToRoom(socket.roomId, payload);
+
+  await saveMessage(
+    socket.user.userId,
+    null,
+    data.message,
+    false,
+    socket.roomId
+  );
+}
 
     if (data.type === "private") {
       const toEmail = data.toEmail.trim().toLowerCase();

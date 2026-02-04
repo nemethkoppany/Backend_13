@@ -29,7 +29,7 @@
   border-color: #d38312;
   width: 120px;
   height: 30px;
-  transition: background-color 0.3s ease,border-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
   font-weight: 600;
 }
@@ -51,7 +51,7 @@
 }
 
 .login-inputs input {
-  width: 100%; 
+  width: 100%;
   padding: 12px 16px;
   font-size: 16px;
   border: 2px solid #ccc;
@@ -72,38 +72,36 @@
   color: #313131;
 }
 
-body{
-  background-color:#FAF9F6 ;
+body {
+  background-color: #faf9f6;
 }
 
-.register-body{
+.register-body {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-#register-register-btn{
+#register-register-btn {
   background-color: #895bd3;
   border-radius: 10px;
   border-width: 2px;
   border-color: #895bd3;
   width: 120px;
   height: 30px;
-  transition: background-color 0.3s ease,border-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
   font-weight: 600;
-
-  
 }
-#register-register-btn:hover{
+
+#register-register-btn:hover {
   background-color: #9d50bb;
   border-color: #9d50bb;
 }
 
-#avatar{
+#avatar {
   font-size: 13px;
-  
 }
 
 #messages {
@@ -115,6 +113,7 @@ body{
   border-radius: 10px;
   background-color: #ffffff;
   margin-bottom: 16px;
+  overflow-y: auto;
 }
 
 #messages li {
@@ -195,10 +194,14 @@ body{
   border-color: #ffd194;
 }
 
-#roomIdInput{
+#roomIdInput {
   height: 30px;
   width: 70px;
   border: #ccc;
   background-color: #ccc;
   border-radius: 5px;
+}
+
+#room-panel {
+  margin-top: 20px;
 }

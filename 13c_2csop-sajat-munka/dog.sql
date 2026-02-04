@@ -128,3 +128,5 @@ ADD roomId INT NOT NULL DEFAULT 1,
 ADD FOREIGN KEY (roomId) REFERENCES rooms(roomId) ON DELETE CASCADE;
 
 DELETE FROM messages;
+
+SELECT userId, email, avatar FROM users WHERE avatar IS NOT NULL;

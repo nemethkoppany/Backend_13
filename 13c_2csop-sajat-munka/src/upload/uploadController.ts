@@ -45,28 +45,31 @@ export const getFileList = async (req: any, res: any) => {
 
 
 }
-export const downloadFile = async  (req: any, res: any) => {
-    const fileId: string = req.params.id
+export const downloadFile = async (req: any, res: any) => {
+  const fileId: string = req.params.id;
 
-    const connection = await mysql.createConnection(config.database);
-    const [results]: any = await connection.query(
-        "Select fileName from files where fileId=? ", [fileId]
-    )
-    if (results.length === 0) {
-        return res.status(500).send("Nincs meg a file!")
-    }
+  const connection = await mysql.createConnection(config.database);
+  const [results]: any = await connection.query(
+      "SELECT fileName FROM files WHERE fileId = ?", [fileId]
+  );
+  await connection.end();
 
+  if (results.length === 0) {
+      return res.status(404).send("Nincs meg a file!");
+  }
 
-    const dirPath = config.baseDir + config.uploadDir
-    res.download(dirPath + fileId, results[0].fileName, (err: any) => {
-        if (err) {
-            res.status(500).send({
-                error: "A fájl nem tölthető le!" + err
-            })
-        }
-    })
+  const filePath = config.baseDir + config.uploadDir + fileId;
 
-}
+  res.setHeader("Content-Type", "application/octet-stream");
+  res.setHeader("Content-Disposition", `attachment; filename="${results[0].fileName}"`);
+
+  res.sendFile(filePath, (err: any) => {
+      if (err) {
+          console.log(err);
+          res.status(500).send("A fájl nem tölthető le!");
+      }
+  });
+};
 export const uploadFile = async (req: any, res: any) => {
     try {
         await uploadMiddleware(req, res)
