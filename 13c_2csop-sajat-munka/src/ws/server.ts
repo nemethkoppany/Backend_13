@@ -3,7 +3,7 @@ import { verifySocketToken } from "../middleware/auth";
 import mysql from "mysql2/promise";
 import config from "../config/config";
 
-interface AuthenticatedWebSocket extends WebSocket {
+interface IUser extends WebSocket {
   user: {
     userId: number;
     email: string;
@@ -13,7 +13,7 @@ interface AuthenticatedWebSocket extends WebSocket {
 }
 
 const wss = new WebSocketServer({ port: 8080 });
-const clients = new Set<AuthenticatedWebSocket>();
+const clients = new Set<IUser>();
 
 
 const broadcastToRoom = (roomId: number, message: string) => {
@@ -25,7 +25,7 @@ const broadcastToRoom = (roomId: number, message: string) => {
 };
 
 const sendPrivate = (fromEmail: string, toEmail: string, message: string) => {
-  let sender: AuthenticatedWebSocket | null = null;
+  let sender: IUser | null = null;
   let found = false;
 
   for (const client of clients) {
@@ -64,7 +64,7 @@ async function saveMessage(senderId: number,receiverId: number | null,content: s
   await connection.end();
 }
 
-wss.on("connection",async  (socket: AuthenticatedWebSocket, req: any) => {
+wss.on("connection",async  (socket: IUser, req: any) => {
   const isValid = verifySocketToken(socket, req);
   if (!isValid) return;
 
@@ -116,7 +116,7 @@ wss.on("connection",async  (socket: AuthenticatedWebSocket, req: any) => {
 
     if (data.type === "private") {
       const toEmail = data.toEmail.trim().toLowerCase();
-      const receiverSocket = Array.from(clients).find((c: AuthenticatedWebSocket) => c.user.email === toEmail) as AuthenticatedWebSocket | undefined;
+      const receiverSocket = Array.from(clients).find((c: IUser) => c.user.email === toEmail) as IUser | undefined;
 
       sendPrivate(fromUserEmail, toEmail, data.message);
 

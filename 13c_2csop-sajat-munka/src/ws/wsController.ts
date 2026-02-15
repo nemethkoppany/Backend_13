@@ -9,7 +9,7 @@ export async function getMessages(req: any, res: Response) {
     return res.status(400).json({ error: "Szoba ID szükséges" });
   }
 
-  const userId = req.user.userId; // kell a privát üzenetekhez
+  const userId = req.user.userId;
   const connection = await mysql.createConnection(config.database);
 
   try {
