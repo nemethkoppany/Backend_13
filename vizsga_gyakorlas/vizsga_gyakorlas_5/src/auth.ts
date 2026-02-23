@@ -1,0 +1,23 @@
+import jwt from "jsonwebtoken"
+import config from "./config"
+
+export const verfiyToken = async(req:any, res:any, next:any) =>{
+    const token = req.body.token
+
+
+    try{
+        if(!token){
+            console.log("Nincs token")
+        }
+
+        const decodedToken = jwt.verify(token, config.JwtSecret)
+
+        req.user = decodedToken;
+
+        return next()
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
