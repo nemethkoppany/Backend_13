@@ -1,34 +1,157 @@
-import jwt from "jsonwebtoken"
-import mysql from "mysql2/promise"
-import config from "./config"
+import jwt from "jsonwebtoken";
+import mysql from "mysql2/promise";
+import config from "./config";
 
-export const Login = async(req:any, res:any) =>{
-    const {email, password} = req.body;
+export const Login = async (req: any, res: any) => {
+    const { email, password } = req.body;
 
-    const connection = await mysql.createConnection(config.databse);
-    try{
-        const [results]:any = await connection.query(`
-            SELECT login(?,?) as id`,[email,password])
+    const connection = await mysql.createConnection(config.database);
+    try {
+        const [results]: any = await connection.query(
+            `
+            SELECT login(?,?) as id`,
+            [email, password],
+        );
 
-            const token = jwt.sign({userId: results[0].id}, config.JwtSecret, {expiresIn:"2h"})
-            res.status(200).json({token: token})
+
+        if (!results[0].id) {
+            return res.status(401).json({ error: "Hibás email vagy jelszó" });
+        }
+        const token = jwt.sign({ userId: results[0].id }, config.JwtSecret, {
+            expiresIn: "2h",
+        });
+        res.status(200).json({ token: token });
+    } catch (err) {
+        console.log(err);
     }
-    catch(err){
-        console.log(err)
-    }
-}
+};
 
-export const getAll = async (req:any, res:any) =>{
-    const connection = await mysql.createConnection(config.databse)
+export const getAll = async (_req: any, res: any) => {
+    const connection = await mysql.createConnection(config.database);
 
-    try{
-        const [results]:any = connection.query(`
+    try {
+        const [results]: any = await connection.query(`
                 SELECT * from pet
-            `)
+            `);
 
-            res.status(200).json(results);
+        res.status(200).json(results);
+    } catch (err) {
+        console.log(err);
     }
-    catch(err){
+};
+
+export const getById = async (req: any, res: any) => {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+        return res.status(400).json({ error: "Hibás ID" });
+    }
+    const connection = await mysql.createConnection(config.database);
+
+    try {
+        const [results]: any = await connection.query(
+            `
+    SELECT * FROM pet WHERE id = ?
+    `,
+            [id],
+        );
+
+        if (!id) {
+            console.log("Nincs ilyen id");
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ error: "Nincs ilyen pet" });
+        }
+
+        res.status(200).json(results[0]);
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const deletePet = async (req: any, res: any) => {
+    const id = Number(req.params.id);
+
+    const connection = await mysql.createConnection(config.database);
+
+    try {
+        const [results]: any = await connection.query(
+            `
+    DELETE FROM pet WHERE id = ?
+    `,
+            [id],
+        );
+
+        if (!id) {
+            console.log("Nincs ilyen id");
+        }
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: "Nincs ilyen pet" });
+        }
+        res.status(200).json("törölve");
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const insertPet = async (req: any, res: any) => {
+    const connection = await mysql.createConnection(config.database)
+
+    try {
+        const [results]: any = await connection.query(`
+            INSERT INTO pet VALUES(NULL,?,?,?,?,?)
+            `, [req.body.nev, req.body.leiras, Number(req.body.ar), Number(req.body.raktaron), req.body.kep])
+
+        if (results.affectedRows === 0) {
+            res.status(404).json("Valami nem jó");
+        }
+
+
+        res.status(200).json("Hozzáadva");
+
+    }
+    catch (err) {
         console.log(err);
     }
 }
+
+
+
+//
+export const updatePetPut = async (req: any, res: any) => {
+    const id = Number(req.params.id);
+    const { nev, leiras, ar, raktaron, kep } = req.body;
+
+    if (isNaN(id)) {
+        return res.status(400).json({ error: "Hibás ID" });
+    }
+
+    if (!nev || !leiras || !ar || !raktaron) {
+        return res.status(400).json({ error: "Minden mező kötelező (PUT)" });
+    }
+
+    const connection = await mysql.createConnection(config.database);
+
+    try {
+        const [results]: any = await connection.query(
+            `UPDATE pet 
+       SET nev = ?, leiras = ?, ar = ?, raktaron = ?, kep = ?
+       WHERE id = ?`,
+            [nev, leiras, Number(ar), Number(raktaron), kep, id]
+        );
+
+        if (results.affectedRows === 0) {
+            return res.status(404).json({ error: "Nincs ilyen pet" });
+        }
+
+        res.status(200).json({ message: "Frissítve (PUT)" });
+
+    } catch (err: any) {
+        console.log(err);
+        res.status(500).json({ error: "Szerver hiba" });
+
+    } finally {
+        await connection.end();
+    }
+};

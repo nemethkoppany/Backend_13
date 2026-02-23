@@ -13,7 +13,7 @@ class DBConfig{
     }
 }
 const config = {
-    databse: new DBConfig(),
+    database: new DBConfig(),
     JwtSecret: process.env.JWT_SECRET!
 }
 

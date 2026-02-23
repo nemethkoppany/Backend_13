@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import config from "./config"
 
-export const verfiyToken = async(req:any, res:any, next:any) =>{
+export const verfiyToken = async(req:any, _res:any, next:any) =>{
     const token = req.body.token
 
 
