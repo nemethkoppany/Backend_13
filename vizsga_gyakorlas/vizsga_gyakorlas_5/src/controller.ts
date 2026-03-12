@@ -151,7 +151,5 @@ export const updatePetPut = async (req: any, res: any) => {
         console.log(err);
         res.status(500).json({ error: "Szerver hiba" });
 
-    } finally {
-        await connection.end();
     }
 };
