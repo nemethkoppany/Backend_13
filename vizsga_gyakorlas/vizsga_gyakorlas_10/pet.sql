@@ -18,17 +18,35 @@ CREATE Table users(
 CREATE Trigger beforeinsert before INSERT on users
 for each row set new.password = pwd_encrypt(new.password);
 
-CREATE Function pwd_encrypt(pwd varchar(255))
-RETURNS varchar(256) DETEREMINISTIC 
-return sha2(conccat(pwd,"sozva"),256);
+DELIMITER $$
 
-CREATE Function login(p_email varchar(255), p_pwd varchar(255))
-RETURNS int DETEREMINISTIC
+CREATE FUNCTION pwd_encrypt(pwd VARCHAR(255))
+RETURNS VARCHAR(256)
+DETERMINISTIC
 BEGIN
-DECLARE ok INT;
-SET ok = 0;
-SELECT id INTO ok from users where users.email = p_eamil AND users.password = pwd_encrypt(p_pwd)
+    RETURN SHA2(CONCAT(pwd, 'sozva'), 256);
+END$$
 
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE FUNCTION login(p_email VARCHAR(255), p_pwd VARCHAR(255))
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE ok INT DEFAULT 0;
+
+    SELECT id INTO ok
+    FROM users
+    WHERE email = p_email
+      AND password = pwd_encrypt(p_pwd)
+    LIMIT 1;
+
+    RETURN ok;
+END$$
+
+DELIMITER ;
 
 INSERT INTO pet VALUES (NULL,"Hörcsögök", "Ez meg rágcsálók", 10500, 5, "./pictures/horcsog.jpg");
 INSERT INTO pet VALUES (NULL,"Tengeri malacok", "Tengeri röfik", 6300, 8, "./pictures/tmalac.jpg");
