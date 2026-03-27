@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # PHP + Apache webszerver
+  app:
+    build: .
+    container_name: kisallat_app
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/var/www/html
+
+  # MySQL adatbázis
+  db:
+    image: mysql:8.0
+    container_name: kisallat_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: kisallat
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./kisallat.sql:/docker-entrypoint-initdb.d/kisallat.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
