@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var controller_1 = require("./controller");
-var router = (0, express_1.Router)();
+const express_1 = require("express");
+const controller_1 = require("./controller");
+const router = (0, express_1.Router)();
 router.post("/login", controller_1.login);
 router.get("/getAll", controller_1.getAll);
 router.get("/getID/:id", controller_1.getById);

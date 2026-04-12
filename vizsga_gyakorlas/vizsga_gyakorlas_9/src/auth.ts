@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken"
 import config from "./config"
-import { convertTypeAcquisitionFromJson } from "typescript"
 
 export const verifyToken = (req:any, res:any, next:any) =>{
 
