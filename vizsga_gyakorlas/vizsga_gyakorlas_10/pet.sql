@@ -45,7 +45,7 @@ BEGIN
 
     RETURN ok;
 END$$
-
+--RETURN (SELECT id FROM users WHERE users.email = p_email AND users.password = pwd_encrypt(p_pwd))
 DELIMITER ;
 
 INSERT INTO pet VALUES (NULL,"Hörcsögök", "Ez meg rágcsálók", 10500, 5, "./pictures/horcsog.jpg");
