@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"target": "es5",
-		"module": "commonjs",
-		"moduleResolution": "node",
+		"target": "es2022",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
 		"esModuleInterop": true,
 		"lib": [
 			"es2015"
@@ -27,7 +27,6 @@
 
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"downlevelIteration": true,
 		"declaration": true,
 
 		"pretty": true

@@ -45,6 +45,12 @@ BEGIN
 
     RETURN ok;
 END$$
+
+DROP FUNCTION IF EXISTS login;
+
+CREATE FUNCTION login(p_email VARCHAR(255), p_pwd VARCHAR(255))
+RETURNS INT DETERMINISTIC
+RETURN (SELECT id FROM users WHERE users.email = p_email AND users.password = pwd_encrypt(p_pwd));
 --RETURN (SELECT id FROM users WHERE users.email = p_email AND users.password = pwd_encrypt(p_pwd))
 DELIMITER ;
 
